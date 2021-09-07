@@ -1,0 +1,50 @@
+Create one table and later after creation alter that table in order to add constraints.
+
+///**Creating a table**///
+
+CREATE TABLE LoginDetails(
+EmpId int,
+UserName varchar(75),
+Password varchar(10),
+EmpDept varchar(20),
+EmpStatus varchar(20),
+);
+
+Select * from LoginDetails;
+Drop table LoginDetails;
+
+insert into LoginDetails(EmpId,UserName,Password,EmpDept,EmpStatus) values (1001,'gho','sid','comp','Mangaon');
+insert into LoginDetails(EmpId,UserName,Password,EmpDept,EmpStatus) values (1002,'tembe','yash','Extc','lonere');
+insert into LoginDetails(EmpId,UserName,Password,EmpDept,EmpStatus) values (1003,'dalvi','suy','instru','panvel');
+
+////**Altering table and adding constraints in them.****///
+
+alter table LoginDetails alter column EmpId int Not Null;
+alter table LoginDetails add constraint pk_Login primary key(EmpId);
+alter table LoginDetails add unique(UserName);
+alter table LoginDetails alter column password varchar(10) Not Null;
+alter table LoginDetails Add Constraint pk_EmpDept 'Development' for EmpDept;
+alter table LoginDetails add check(EmpStatus = 'Actice');
+alter table Person1 alter column City varchar(255) Not Null;
+alter table Person1 ADD primary key (ID);
+
+
+
+
+
+
+
+
+CREATE TABLE SalesPerson (
+Order_Id int,
+Order_Num int NOT NULL,
+Person_Id int,
+
+);
+alter table SalesPerson add constraint pk_SalesPerson primary key (Order_Id);
+insert into SalesPerson(Order_Id,Order_Num,Person_Id) values (1,222,10);
+insert into SalesPerson(Order_Id,Order_Num,Person_Id) values (2,223,20);
+insert into SalesPerson(Order_Id,Order_Num,Person_Id) values (3,223,10);
+
+Drop table SalesPerson;
+Select * from SalesPerson;
