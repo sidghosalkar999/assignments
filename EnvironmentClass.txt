@@ -1,0 +1,173 @@
+Explore classes and its methods of Environment class
+
+--->
+
+The Environment class of the System namespace is handy for getting and setting various operating system–related information. You can use this class to retrieve information such as command-line arguments, exit codes, environment variable settings, contents of the call stack, time since last system boot in milliseconds (tick count), and version of the CLR. Members of the Environment class are described in Table 21.13. 
+
+Table : Environment Class Members 
+
+The System.Environment.SystemDirectory property returns a string containing the operating system's directory (e.g., c:\winnt\system32). You can use the Environment.UserInteractive property to get a Boolean value indicating whether the current process is running in user-interactive mode. (User-interactive mode means the user can send inputs to the process and see outputs with his or her eyes!) UserInteractive will be true if the current process is running in user-interactive mode. 
+
+To list the environment variables, open the command prompt console, type "SET," and press ENTER. You can obtain the values of any of these environment variables by using the Environment.GetEnvironmentVariable method. Simply pass it the name of the environment variable for which you want to obtain a value, and it will return the value as a string. For example, if you want the name of the user who is currently logged in, you can use the following: 
+
+            Environment.GetEnvironmentVariable("USERNAME");
+
+You can use the Environment.NewLine property to get the newline string defined for this environment. (In our case it's a string containing \r\n.) 
+
+You can quit our application program anytime and return an Int32 exit code to the operating system, using the Environment.Exit(<exit_code>) method. 
+
+You can use the Environment.GetCommandLineArgs() method to return an array of strings where each element contains a command-line argument. 
+
+String str1[] = Environment.GetCommandLineArgs();
+str1[0] ; // the executable file name
+str1[1]; // zero or more command line arguments
+str1[2]; // zero or more command line arguments
+
+Listing : uses various Environment class methods, fields, and properties to illustrate the power of this class. 
+
+Listing : Using the Environment Class (environment1.cs) 
+
+using System;
+using System.Diagnostics;
+
+namespace EnvironmentTestConsole
+{
+    /// <summary>
+    /// Summary description for Class1.
+    /// </summary>
+    class Class1
+    {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+
+        public static void Main(string[] args)
+        {
+            // reading the entire command line
+            // including the path to the application:
+            String s = Environment.CommandLine;
+            Console.WriteLine(s);
+
+            // reading each argument individually:
+            foreach (String s1 in
+            Environment.GetCommandLineArgs())
+                Console.WriteLine(s1 + "\n");
+
+            // reading a specific argument:
+            if (Environment.GetCommandLineArgs().Length > 0)
+            {
+                s = Environment.GetCommandLineArgs().GetValue(0).ToString();
+                Console.WriteLine(s + "\n");
+            }
+
+            // manipulating the current working directory:
+            Environment.CurrentDirectory = @"C:\Temp";
+            Console.WriteLine("Current directory is: " + Environment.CurrentDirectory);
+
+            // getting the computer and user names:
+            Console.WriteLine("Machine= " + Environment.MachineName);
+            Console.WriteLine("User= " +  Environment.UserDomainName +"\\" + Environment.UserName);
+            Console.WriteLine("Is Interactive= " + Environment.UserInteractive.ToString());
+
+            // reading all environment variables
+            foreach (String s2 in Environment.GetEnvironmentVariables().Keys)
+                Console.WriteLine(s2 + "=" + Environment.GetEnvironmentVariable(s2).ToString());
+
+            // reading a specific variable
+            s = Environment.GetEnvironmentVariable("PATH").ToString();
+
+            // translating or expanding strings containing
+            // variable references
+            Console.WriteLine(Environment.ExpandEnvironmentVariables(@"User%userdomain%\%username% on %computername%\n"));
+
+            // identifying logical drive letters
+            foreach (String s3 in Environment.GetLogicalDrives())
+                Console.WriteLine("Drive: " + s3 + "\n");
+
+            // locating the system folder
+            Console.WriteLine("System Dir= " + Environment.SystemDirectory + "\n");
+
+            // locating all system and other special folders
+            String sFolderName = "";
+            String sFolderPath = "";
+
+            foreach (Environment.SpecialFolder eFolderID in Enum.GetValues(typeof(System.Environment.SpecialFolder)))
+            {
+                sFolderName = Enum.GetName(typeof(System.Environment.SpecialFolder),eFolderID);
+                sFolderPath = Environment.GetFolderPath(eFolderID);
+                Console.WriteLine(sFolderName + "=" + sFolderPath + "\n");
+            }
+            // locating a specific special folder
+            sFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            // identifying OS parameters:
+            s = Environment.NewLine; // New Line sequence for the
+            // current OS
+
+            switch (Environment.OSVersion.Platform)
+            {
+                case PlatformID.Win32NT:
+                    Console.WriteLine("Running under Windows NT or Windows 2000\n");
+                    break;
+                case PlatformID.Win32S:
+                    Console.WriteLine("Running under Win32s\n");
+                    break;
+                case PlatformID.Win32Windows:
+                    Console.WriteLine("Running under win9x\n");
+                    break;
+            }
+
+            Console.WriteLine("OS Version= " + Environment.OSVersion.Version.ToString() + "\n");
+            Console.WriteLine("Stack size= " + Environment.StackTrace + "\n");
+            Console.WriteLine("Tick Count= " + Environment.TickCount.ToString() +"\n");
+            Debug.WriteLine("CLR Version= " +  Environment.Version.ToString() + "\n");
+            Debug.WriteLine("WorkingSet size= " + Environment.WorkingSet.ToString() + "\n");
+
+            // setting an exit code for the current process
+            Environment.ExitCode = 19;
+            Console.WriteLine("Exit code=" + Environment.ExitCode.ToString() + "\n");
+            Console.WriteLine("\nHit any key to continue\n");
+            Console.ReadLine();
+
+            //Setting an exit code and terminating immediately:
+            Environment.Exit(1919);
+            // the exit codes are ignored in debugging and are only valid
+            // for releases.
+        }
+    }
+}
+
+The Win32 SDK includes an API called GetVersionEx that returns the information in the OSVERSIONINFO structure. Once we have populated this structure, we can look at the values of its various members to see what version of the operating system we are running. To accomplish the same task using the Environment class, simply examine the Environment.OSVersion property that returns an OperatingSystem object. This object can be used to get the value of the operating system version. 
+
+The OperatingSystem class has three properties that contain all the information you need to return attributes about the operating system. Following is a list of these properties:
+Platform property. Returns a PlatformID value. This enumeration has three possible values: Win32NT-the operating system is Windows NT/2000/XP; Win32Windows-the operating system is Windows 95/98/ME; Win32S-the operating system is a Win32 subsystem running on a 16-bit version of Windows 3.0/3.1/3.11WFW. We leave the honor of running of the code on the MAC and Linux operating systems to you, so you can see how the .NET Framework is implemented there. Just run Listing 21.31.
+CSD property. Indicates the Corrected Service Diskette number of the operating system. In other words, this is a string representing the recent service pack installed for the operating system.
+Version property. Returns a Version class. This class is nothing but the standard version class used for indicating any assembly's version. .NET defines a version value in the format major.minor.build.revision. The Version class has four properties that completely define the version of an operating system or an assembly:
+Major-major version number 
+Minor-minor version number 
+Build-build number 
+Revision-revision number
+You can use the values returned by the preceding three properties to get the exact version of the operating system (Windows) running on your computer. 
+
+Note that the build and revision numbers are optional! 
+
+Listing 21.31 shows how to use the Environment class in the System namespace to get an OperatingSystem object. 
+
+Listing 21.31-Getting Operating System Details using System; 
+
+using System;
+
+public class EnvironmentVersionSample
+{
+    public static void Main(string[] args)
+    {
+        // Get the operating system from Environment Class
+        OperatingSystem os = Environment.OSVersion;
+        // Get the version informationVersion vs = os.Version;
+        Console.WriteLine("Major" + vs.Major);
+        Console.WriteLine("Minor" + vs.Minor);
+        Console.WriteLine("Revision" + vs.Revision);
+        Console.WriteLine("BuildNumber" + vs.Build);
+    }
+} 

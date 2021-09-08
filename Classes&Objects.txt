@@ -1,0 +1,127 @@
+Explore classes and its methods of Object
+
+-->
+
+Class and Object are the basic concepts of Object-Oriented Programming which revolve around the real-life entities. A class is a user-defined blueprint or prototype from which objects are created. Basically, a class combines the fields and methods(member function which defines actions) into a single unit. In C#, classes support polymorphism, inheritance and also provide the concept of derived classes and base classes.
+
+----------------------Declaration of class-------------------------
+
+Generally, a class declaration contains only keyword class, followed by an identifier(name) of the class. But there are some optional attributes that can be used with class declaration according to the application requirement. In general, class declarations can include these components, in order:
+
+Modifiers: A class can be public or internal etc. By default modifier of class is internal.
+Keyword class: A class keyword is used to declare the type class.
+Class Identifier: The variable of type class is provided. The identifier(or name of class) should begin with a initial letter which should be capitalized by convention.
+Base class or Super class: The name of the class’s parent (superclass), if any, preceded by the : (colon). This is optional.
+Interfaces: A comma-separated list of interfaces implemented by the class, if any, preceded by the : (colon). A class can implement more than one interface. This is optional.
+Body: The class body is surrounded by { } (curly braces).
+Constructors in class are used for initializing new objects. Fields are variables that provide the state of the class and its objects, and methods are used to implement the behavior of the class and its objects.
+
+Example: -
+
+// declaring public class
+public class classes
+{
+
+    // field variable
+    public int a, b;
+
+      // member function or method
+      public void display()
+      {
+          Console.WriteLine(“Class & Objects in C#”);
+      }
+}
+
+
+--------------Objects---------------------------------
+
+It is a basic unit of Object-Oriented Programming and represents the real-life entities. A typical C# program creates many objects, which as you know, interact by invoking methods. An object consists of :
+
+State: It is represented by attributes of an object. It also reflects the properties of an object.
+Behavior: It is represented by methods of an object. It also reflects the response of an object with other objects.
+Identity: It gives a unique name to an object and enables one object to interact with other objects.
+Consider Dog as an object and see the below diagram for its identity, state, and behavior.
+
+Objects correspond to things found in the real world. For example, a graphics program may have objects such as “circle”, “square”, “menu”. An online shopping system might have objects such as “shopping cart”, “customer”, and “product”.
+
+Declaring Objects (Also called instantiating a class)
+
+When an object of a class is created, the class is said to be instantiated. All the instances share the attributes and the behavior of the class. But the values of those attributes, i.e. the state are unique for each object. A single class may have any number of instances.
+
+Example:
+
+Initializing an object
+
+The new operator instantiates a class by allocating memory for a new object and returning a reference to that memory. The new operator also invokes the class constructor.
+
+Example:
+
+
+// C# program to illustrate the
+// Initialization of an object
+using System;
+  
+// Class Declaration
+public class Dog {
+  
+    // Instance Variables
+    String name;
+    String breed;
+    int age;
+    String color;
+  
+    // Constructor Declaration of Class
+    public Dog(String name, String breed,
+                  int age, String color)
+    {
+        this.name = name;
+        this.breed = breed;
+        this.age = age;
+        this.color = color;
+    }
+  
+    // Property 1
+    public String getName()
+    {
+        return name;
+    }
+  
+    // Property 2
+    public String getBreed()
+    {
+        return breed;
+    }
+  
+    // Property 3
+    public int getAge()
+    {
+        return age;
+    }
+  
+    // Property 4
+    public String getColor()
+    {
+        return color;
+    }
+  
+    // Method 1
+    public String toString()
+    {
+        return ("Hi my name is " + this.getName()
+                + ".\nMy breed, age and color are " + this.getBreed() 
+                + ", " + this.getAge() + ", " + this.getColor());
+    }
+  
+// Main Method
+public static void Main(String[] args)
+    {
+          
+        // Creating object
+        Dog tuffy = new Dog("tuffy", "papillon", 5, "white");
+        Console.WriteLine(tuffy.toString());
+    }
+}
+Output:
+
+Hi my name is tuffy.
+My breed, age and color are papillon, 5, white
